@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class Topping {
-    private String name;
+    private String names;
 }
