@@ -12,7 +12,7 @@ public class CakesService {
     }
 
     Optional<Cake> getCake(String name) {
-        return CakesMock.CAKES.stream().filter(cake -> cake.getName().equals(name)).
+        return CakesMock.CAKES.stream().filter(cake -> cake.getName().equalsIgnoreCase(name)).
                 findFirst();
     }
 }

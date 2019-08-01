@@ -1,9 +1,7 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +16,17 @@ public class CakesController {
     }
 
     @GetMapping("/{name}")
-    public Optional<Cake> getCake(@PathVariable String name) {
-        return CakesMock.CAKES.stream().filter(cake -> cake.getName().equalsIgnoreCase(name)).findFirst();
+    public Cake getCake(@PathVariable String name) {
+        Optional<Cake> result = CakesMock.CAKES.stream().filter(
+                cake -> cake.getName().equalsIgnoreCase(name)).findFirst();
+
+        return result.orElseThrow(CakeNotFoundException::new);
+    }
+}
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+class CakeNotFoundException extends RuntimeException {
+    CakeNotFoundException() {
+        super("Cake with the given name does not exist");
     }
 }
