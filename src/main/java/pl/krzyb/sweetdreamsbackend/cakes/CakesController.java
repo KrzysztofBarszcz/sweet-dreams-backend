@@ -10,15 +10,20 @@ import java.util.Optional;
 @RequestMapping("cakes")
 public class CakesController {
 
+    private CakesService service;
+
+    CakesController(CakesService service) {
+        this.service = service;
+    }
+
     @GetMapping
     public List<Cake> getCakes() {
-        return CakesMock.CAKES;
+        return service.getCakes();
     }
 
     @GetMapping("/{name}")
     public Cake getCake(@PathVariable String name) {
-        Optional<Cake> result = CakesMock.CAKES.stream().filter(
-                cake -> cake.getName().equalsIgnoreCase(name)).findFirst();
+        Optional<Cake> result = service.getCake(name);
 
         return result.orElseThrow(CakeNotFoundException::new);
     }
