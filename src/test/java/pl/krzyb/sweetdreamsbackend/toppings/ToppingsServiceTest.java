@@ -22,7 +22,6 @@ public class ToppingsServiceTest {
     @Test
     public void getAllShouldReturnAllToppings() {
         List<Topping> result = service.getToppings();
-
         Assert.assertThat(result, hasSize(4));
     }
 
