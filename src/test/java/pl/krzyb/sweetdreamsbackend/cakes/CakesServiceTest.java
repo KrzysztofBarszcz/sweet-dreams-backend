@@ -1,13 +1,12 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class CakesServiceTest {
 
@@ -16,25 +15,25 @@ public class CakesServiceTest {
     @Test
     public void getOneShouldReturnCake() {
         Optional<Cake> result = service.getCake("Pie");
-        Assert.assertThat(result.get().getName(), equalTo("Pie"));
+        assertThat(result.get().getName(), equalTo("Pie"));
     }
 
     @Test
     public void getAllShouldReturnAllCakes() {
         List<Cake> result = service.getCakes();
 
-        Assert.assertThat(result, hasSize(4));
+        assertThat(result, hasSize(4));
     }
 
     @Test
     public void getShouldIgnoreStringCase() {
         Optional<Cake> result = service.getCake("EcLaIR");
-        Assert.assertThat(result.get().getName(), equalTo("Eclair"));
+        assertThat(result.get().getName(), equalTo("Eclair"));
     }
 
     @Test
     public void getNotExistingCakeShouldEmptyOptional() {
         Optional<Cake> result = service.getCake("not existing");
-        Assert.assertTrue(result.isEmpty());
+        assertThat(result.isEmpty(), is(true));
     }
 }
