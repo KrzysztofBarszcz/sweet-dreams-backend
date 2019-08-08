@@ -7,13 +7,19 @@ import java.util.Optional;
 
 @Service
 public class CakesService {
+
+    private final CakesRepository repository;
+
+    CakesService(CakesRepository repository) {
+        this.repository = repository;
+    }
+
     List<Cake> getCakes() {
-        return CakesMock.CAKES;
+        return repository.findAll();
     }
 
     Optional<Cake> getCake(String name) {
-        return CakesMock.CAKES.stream().filter(cake -> cake.getName().equalsIgnoreCase(name)).
-                findFirst();
+        return Optional.ofNullable(repository.findCakeByName(name));
     }
 
     void addCake(Cake cake) {
