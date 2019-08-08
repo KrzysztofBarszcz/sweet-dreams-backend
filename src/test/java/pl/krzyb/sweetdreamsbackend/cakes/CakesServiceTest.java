@@ -1,5 +1,6 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,6 +12,11 @@ import static org.hamcrest.Matchers.*;
 public class CakesServiceTest {
 
     private CakesService service = new CakesService();
+
+    @BeforeEach
+    public void setUp() {
+        CakesMock.refreshCakes();
+    }
 
     @Test
     public void getOneShouldReturnCake() {
@@ -35,5 +41,19 @@ public class CakesServiceTest {
     public void getNotExistingCakeShouldEmptyOptional() {
         Optional<Cake> result = service.getCake("not existing");
         assertThat(result.isEmpty(), is(true));
+    }
+
+    @Test
+    public void addCakeShouldWork() {
+        Cake cake = new Cake("new cake");
+        service.addCake(cake);
+        assertThat(service.getCakes().contains(cake), is(true));
+    }
+
+    @Test
+    public void removeCakeShouldWork() {
+        Cake cakeToRemove = new Cake("pie");
+        service.deleteCake(cakeToRemove.getName());
+        assertThat(service.getCakes().contains(cakeToRemove), is(false));
     }
 }

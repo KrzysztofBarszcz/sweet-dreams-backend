@@ -27,6 +27,19 @@ public class CakesController {
 
         return result.orElseThrow(CakeNotFoundException::new);
     }
+
+    @PostMapping
+    public Cake addCake(@RequestBody Cake cake) {
+        service.addCake(cake);
+        return cake;
+    }
+
+    @DeleteMapping("/{name}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCake(@PathVariable String name) {
+        boolean isRemoved = service.deleteCake(name);
+        if (!isRemoved) throw new CakeNotFoundException();
+    }
 }
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
