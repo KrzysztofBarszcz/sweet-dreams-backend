@@ -7,20 +7,31 @@ import java.util.Optional;
 
 @Service
 public class CakesService {
+
+    private final CakesRepository repository;
+
+    CakesService(CakesRepository repository) {
+        this.repository = repository;
+    }
+
     List<Cake> getCakes() {
-        return CakesMock.CAKES;
+        return repository.findAll();
     }
 
     Optional<Cake> getCake(String name) {
-        return CakesMock.CAKES.stream().filter(cake -> cake.getName().equalsIgnoreCase(name)).
-                findFirst();
+        return Optional.ofNullable(repository.findCakeByNameIgnoreCase(name));
     }
 
     void addCake(Cake cake) {
-        CakesMock.CAKES.add(cake);
+        repository.save(cake);
     }
 
     boolean deleteCake(String name) {
-        return CakesMock.CAKES.removeIf(cake -> cake.getName().equalsIgnoreCase(name));
+        Cake cakeToRemove = repository.findCakeByNameIgnoreCase(name);
+        if(cakeToRemove != null) {
+            repository.delete(cakeToRemove);
+            return true;
+        }
+        else return false;
     }
 }
