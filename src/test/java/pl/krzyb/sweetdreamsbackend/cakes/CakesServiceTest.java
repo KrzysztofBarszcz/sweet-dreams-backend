@@ -1,7 +1,10 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,13 +12,24 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@SpringBootTest
 public class CakesServiceTest {
 
-    private CakesService service = new CakesService();
+    @Autowired
+    private CakesRepository repository;
+    @Autowired
+    private CakesService service;
 
     @BeforeEach
     public void setUp() {
-        CakesMock.refreshCakes();
+        List<Cake> cakes = List.of(new Cake("Pie"), new Cake("Eclair"),
+                new Cake("Cheese cake"), new Cake("Birthday cake"));
+        repository.saveAll(cakes);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        repository.deleteAll();
     }
 
     @Test

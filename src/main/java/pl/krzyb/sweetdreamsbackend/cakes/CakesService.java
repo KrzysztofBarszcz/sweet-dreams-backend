@@ -19,14 +19,19 @@ public class CakesService {
     }
 
     Optional<Cake> getCake(String name) {
-        return Optional.ofNullable(repository.findCakeByName(name));
+        return Optional.ofNullable(repository.findCakeByNameIgnoreCase(name));
     }
 
     void addCake(Cake cake) {
-        CakesMock.CAKES.add(cake);
+        repository.save(cake);
     }
 
     boolean deleteCake(String name) {
-        return CakesMock.CAKES.removeIf(cake -> cake.getName().equalsIgnoreCase(name));
+        Cake cakeToRemove = repository.findCakeByNameIgnoreCase(name);
+        if(cakeToRemove != null) {
+            repository.delete(cakeToRemove);
+            return true;
+        }
+        else return false;
     }
 }
