@@ -15,4 +15,12 @@ public class CakesService {
         return CakesMock.CAKES.stream().filter(cake -> cake.getName().equalsIgnoreCase(name)).
                 findFirst();
     }
+
+    void addCake(Cake cake) {
+        CakesMock.CAKES.add(cake);
+    }
+
+    boolean deleteCake(String name) {
+        return CakesMock.CAKES.removeIf(cake -> cake.getName().equalsIgnoreCase(name));
+    }
 }
