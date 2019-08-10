@@ -1,0 +1,4 @@
+logging:
+  level:
+    pl.krzyb: debug
+  path: logs
