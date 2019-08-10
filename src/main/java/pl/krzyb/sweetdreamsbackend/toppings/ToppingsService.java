@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-class ToppingsService {
+public class ToppingsService {
     private ToppingsRepository repository;
 
     ToppingsService(ToppingsRepository repository) {

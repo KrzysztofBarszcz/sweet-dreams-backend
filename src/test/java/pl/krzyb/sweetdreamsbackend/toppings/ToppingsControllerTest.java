@@ -41,7 +41,7 @@ public class ToppingsControllerTest {
     }
 
     @Test
-    public void getCakesShouldReturnOkAnd4Cakes() throws Exception {
+    public void getToppingsShouldReturnOkAnd4Toppings() throws Exception {
         mvc.perform(get("/toppings")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)));
     }
@@ -53,12 +53,12 @@ public class ToppingsControllerTest {
     }
 
     @Test
-    public void postNewToppingShouldReturnOkAndAddCake() throws Exception {
+    public void postNewToppingShouldReturnOkAndAddTopping() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Topping topping = new Topping("newtopping");
-        String cakeString = mapper.writeValueAsString(topping);
+        String toppingString = mapper.writeValueAsString(topping);
         mvc.perform(post("/toppings")
-                .contentType(MediaType.APPLICATION_JSON).content(cakeString))
+                .contentType(MediaType.APPLICATION_JSON).content(toppingString))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("newtopping")));
     }

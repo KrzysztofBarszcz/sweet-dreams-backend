@@ -65,9 +65,9 @@ public class ToppingsServiceTest {
     }
 
     @Test
-    public void removeCakeShouldWork() {
-        Topping cakeToRemove = new Topping("pie");
-        service.deleteTopping(cakeToRemove.getName());
-        assertThat(service.getToppings().contains(cakeToRemove), is(false));
+    public void removeToppingShouldWork() {
+        Topping toppingToRemove = new Topping("pie");
+        service.deleteTopping(toppingToRemove.getName());
+        assertThat(service.getToppings().contains(toppingToRemove), is(false));
     }
 }
