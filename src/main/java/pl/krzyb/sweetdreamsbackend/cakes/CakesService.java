@@ -22,8 +22,8 @@ public class CakesService {
         return Optional.ofNullable(repository.findCakeByNameIgnoreCase(name));
     }
 
-    void addCake(Cake cake) {
-        repository.save(cake);
+    Cake addCake(Cake cake) {
+        return repository.save(cake);
     }
 
     boolean deleteCake(String name) {

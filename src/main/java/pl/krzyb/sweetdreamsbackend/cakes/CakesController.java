@@ -30,8 +30,7 @@ public class CakesController {
 
     @PostMapping
     public Cake addCake(@RequestBody Cake cake) {
-        service.addCake(cake);
-        return cake;
+        return service.addCake(cake);
     }
 
     @DeleteMapping("/{name}")
