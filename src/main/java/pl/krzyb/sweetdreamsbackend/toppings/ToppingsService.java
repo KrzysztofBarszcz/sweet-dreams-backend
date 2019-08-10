@@ -1,11 +1,13 @@
 package pl.krzyb.sweetdreamsbackend.toppings;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ToppingsService {
     private ToppingsRepository repository;
 
@@ -14,22 +16,34 @@ public class ToppingsService {
     }
 
     List<Topping> getToppings() {
-        return repository.findAll();
+        var toppings = repository.findAll();
+        log.error(log.getClass().getCanonicalName());
+        log.debug("Found {} toppings.", toppings.size());
+        return toppings;
     }
 
     Optional<Topping> getTopping(String name) {
-        return Optional.ofNullable(repository.findToppingByNameIgnoreCase(name));
+        var topping = Optional.ofNullable(repository.findToppingByNameIgnoreCase(name));
+        if(topping.isPresent()) log.debug("Topping {} found.", name);
+        else log.debug("Topping {} not found.", name);
+        return topping;
     }
 
     Topping addTopping(Topping topping) {
-        return repository.save(topping);
+        var savedTopping = repository.save(topping);
+        log.debug("Added new topping: {}.", savedTopping.getName());
+        return savedTopping;
     }
 
     boolean deleteTopping(String name) {
         Topping toppingToRemove = repository.findToppingByNameIgnoreCase(name);
         if (toppingToRemove != null) {
             repository.delete(toppingToRemove);
+            log.debug("Topping {} removed", name);
             return true;
-        } else return false;
+        } else {
+            log.debug("Tried to remove topping: {} but it does not exist.", name);
+            return false;
+        }
     }
 }
