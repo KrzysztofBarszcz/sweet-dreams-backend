@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'yarn run test'
+                sh './jenkins/scripts/test_project.sh'
             }
         }
     }
