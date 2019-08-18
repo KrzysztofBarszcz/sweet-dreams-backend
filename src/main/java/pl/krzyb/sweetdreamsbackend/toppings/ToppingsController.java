@@ -41,9 +41,3 @@ public class ToppingsController {
     }
 }
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-class ToppingNotFoundException extends RuntimeException {
-    ToppingNotFoundException() {
-        super("Topping with the given name does not exist");
-    }
-}

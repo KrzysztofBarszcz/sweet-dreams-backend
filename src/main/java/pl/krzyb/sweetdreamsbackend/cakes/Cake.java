@@ -4,8 +4,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import pl.krzyb.sweetdreamsbackend.toppings.Topping;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,4 +20,7 @@ public class Cake {
 
     @NonNull
     private String name;
+
+    @ManyToMany
+    private List<Topping> toppings;
 }

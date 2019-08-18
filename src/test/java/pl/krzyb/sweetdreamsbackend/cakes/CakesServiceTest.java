@@ -1,13 +1,13 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -34,8 +34,8 @@ public class CakesServiceTest {
 
     @Test
     public void getOneShouldReturnCake() {
-        Optional<Cake> result = service.getCake("Pie");
-        assertThat(result.get().getName(), equalTo("Pie"));
+        Cake result = service.getCakeOrThrow("Pie");
+        assertThat(result.getName(), equalTo("Pie"));
     }
 
     @Test
@@ -47,14 +47,14 @@ public class CakesServiceTest {
 
     @Test
     public void getShouldIgnoreStringCase() {
-        Optional<Cake> result = service.getCake("EcLaIR");
-        assertThat(result.get().getName(), equalTo("Eclair"));
+        Cake result = service.getCakeOrThrow("EcLaIR");
+        assertThat(result.getName(), equalTo("Eclair"));
     }
 
     @Test
-    public void getNotExistingCakeShouldEmptyOptional() {
-        Optional<Cake> result = service.getCake("not existing");
-        assertThat(result.isEmpty(), is(true));
+    public void getNotExistingCakeShouldThrowException() {
+        Assertions.assertThrows(CakeNotFoundException.class,
+                ()-> service.getCakeOrThrow("not existing"));
     }
 
     @Test

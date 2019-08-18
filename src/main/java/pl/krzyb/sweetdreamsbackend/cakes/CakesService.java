@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 @Slf4j
@@ -22,11 +23,13 @@ public class CakesService {
         return cakes;
     }
 
-    Optional<Cake> getCake(String name) {
+    Cake getCakeOrThrow(String name) {
         var cake = Optional.ofNullable(repository.findCakeByNameIgnoreCase(name));
-        if(cake.isPresent()) log.debug("Cake {} found.", name);
-        else log.debug("Cake {} not found.", name);
-        return cake;
+        cake.ifPresent((elem) -> log.debug("Cake {} found.", name));
+        return cake.orElseThrow(()-> {
+            log.debug("Cake {} not found.", name);
+            throw new CakeNotFoundException();
+        });
     }
 
     Cake addCake(Cake cake) {
@@ -37,12 +40,11 @@ public class CakesService {
 
     boolean deleteCake(String name) {
         Cake cakeToRemove = repository.findCakeByNameIgnoreCase(name);
-        if(cakeToRemove != null) {
+        if (cakeToRemove != null) {
             repository.delete(cakeToRemove);
             log.debug("Cake removed: {}.", name);
             return true;
-        }
-        else {
+        } else {
             log.debug("Tried to remove cake: {} but it does not exist.", name);
             return false;
         }
