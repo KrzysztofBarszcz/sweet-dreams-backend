@@ -10,7 +10,7 @@ import java.util.Optional;
 @Slf4j
 public class CakesService {
 
-    private final CakesRepository repository;
+    private CakesRepository repository;
 
     CakesService(CakesRepository repository) {
         this.repository = repository;
@@ -22,27 +22,33 @@ public class CakesService {
         return cakes;
     }
 
-    Optional<Cake> getCake(String name) {
+    public Cake getCake(String name) {
         var cake = Optional.ofNullable(repository.findCakeByNameIgnoreCase(name));
-        if(cake.isPresent()) log.debug("Cake {} found.", name);
-        else log.debug("Cake {} not found.", name);
-        return cake;
+        if (cake.isPresent())
+            log.debug("Cake {} found.", name);
+        return cake.orElseThrow(()-> {
+            log.debug("Cake {} not found.", name);
+            throw new CakeNotFoundException();
+        });
     }
 
     Cake addCake(Cake cake) {
-        Cake savedCake = repository.save(cake);
-        log.debug("Added new cake: {}.", cake.getName());
+        var savedCake = repository.save(cake);
+        log.debug("Added new cake: {}.", savedCake.getName());
         return savedCake;
+    }
+
+    public Cake saveCake(Cake cake){
+        return repository.save(cake);
     }
 
     boolean deleteCake(String name) {
         Cake cakeToRemove = repository.findCakeByNameIgnoreCase(name);
-        if(cakeToRemove != null) {
+        if (cakeToRemove != null) {
             repository.delete(cakeToRemove);
             log.debug("Cake removed: {}.", name);
             return true;
-        }
-        else {
+        } else {
             log.debug("Tried to remove cake: {} but it does not exist.", name);
             return false;
         }

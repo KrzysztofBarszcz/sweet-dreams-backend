@@ -17,16 +17,18 @@ public class ToppingsService {
 
     List<Topping> getToppings() {
         var toppings = repository.findAll();
-        log.error(log.getClass().getCanonicalName());
         log.debug("Found {} toppings.", toppings.size());
         return toppings;
     }
 
-    Optional<Topping> getTopping(String name) {
+    public Topping getTopping(String name) {
         var topping = Optional.ofNullable(repository.findToppingByNameIgnoreCase(name));
-        if(topping.isPresent()) log.debug("Topping {} found.", name);
-        else log.debug("Topping {} not found.", name);
-        return topping;
+        if(topping.isPresent())
+            log.debug("Topping {} found.", name);
+        return topping.orElseThrow(() -> {
+            log.debug("Topping {} not found.", name);
+            throw new ToppingNotFoundException();
+        });
     }
 
     Topping addTopping(Topping topping) {
