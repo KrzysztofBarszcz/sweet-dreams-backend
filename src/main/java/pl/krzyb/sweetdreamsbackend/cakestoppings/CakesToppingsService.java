@@ -3,11 +3,9 @@ package pl.krzyb.sweetdreamsbackend.cakestoppings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.krzyb.sweetdreamsbackend.cakes.Cake;
-import pl.krzyb.sweetdreamsbackend.cakes.CakeNotFoundException;
-import pl.krzyb.sweetdreamsbackend.cakes.CakesRepository;
+import pl.krzyb.sweetdreamsbackend.cakes.CakesService;
 import pl.krzyb.sweetdreamsbackend.toppings.Topping;
-import pl.krzyb.sweetdreamsbackend.toppings.ToppingNotFoundException;
-import pl.krzyb.sweetdreamsbackend.toppings.ToppingsRepository;
+import pl.krzyb.sweetdreamsbackend.toppings.ToppingsService;
 
 import java.util.List;
 
@@ -15,41 +13,38 @@ import java.util.List;
 @Slf4j
 public class CakesToppingsService {
 
-    private final CakesRepository cakesRepository;
-    private final ToppingsRepository toppingsRepository;
+    private final CakesService cakesService;
+    private final ToppingsService toppingsService;
 
-    CakesToppingsService(CakesRepository cakesRepository, ToppingsRepository toppingsRepository) {
-        this.cakesRepository = cakesRepository;
-        this.toppingsRepository = toppingsRepository;
+    CakesToppingsService(CakesService cakesService, ToppingsService toppingsService) {
+        this.cakesService = cakesService;
+        this.toppingsService = toppingsService;
     }
 
     Cake addToppingToCake(String cakeName, String toppingName) {
-        Cake cake = cakesRepository.findCakeByNameIgnoreCase(cakeName);
-        Topping topping = toppingsRepository.findToppingByNameIgnoreCase(toppingName);
-
-        if (cake == null)
-            throw new CakeNotFoundException();
-
-        if (topping == null)
-            throw new ToppingNotFoundException();
+        Cake cake = cakesService.getCake(cakeName);
+        Topping topping = toppingsService.getTopping(toppingName);
 
         cake.getToppings().add(topping);
         log.debug("Added new topping: {}, to cake: {}", topping.getName(), cake.getName());
-        return cakesRepository.save(cake);
+        return cakesService.saveCake(cake);
     }
 
     List<Topping> getToppingsForCake(String cakeName) {
-        Cake cake = cakesRepository.findCakeByNameIgnoreCase(cakeName);
-
-        if (cake == null)
-            throw new CakeNotFoundException();
+        Cake cake = cakesService.getCake(cakeName);
 
         log.debug("Found {} toppings", cake.getToppings().size());
         return cake.getToppings();
     }
 
     public void deleteToppingForCake(String cakeName, String toppingName) {
-        Cake cake = cakesRepository.findCakeByNameIgnoreCase(cakeName);
+        Cake cake = cakesService.getCake(cakeName);
+        Topping topping = toppingsService.getTopping(toppingName);
+        var toppings = cake.getToppings();
+        if (!toppings.contains(topping))
+            throw new CakeDoesNotHaveToppingException(cakeName, toppingName);
+        toppings.remove(topping);
 
+        cakesService.saveCake(cake);
     }
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import pl.krzyb.sweetdreamsbackend.toppings.Topping;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,5 +23,5 @@ public class Cake {
     private String name;
 
     @ManyToMany
-    private List<Topping> toppings;
+    private List<Topping> toppings = new ArrayList<>();
 }

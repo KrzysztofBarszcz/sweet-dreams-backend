@@ -2,17 +2,14 @@ package pl.krzyb.sweetdreamsbackend.cakes;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.krzyb.sweetdreamsbackend.cakestoppings.CakesToppingsService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("cakes")
 public class CakesController {
 
     private CakesService service;
-    private CakesToppingsService cakesToppingsService;
 
     CakesController(CakesService service) {
         this.service = service;
@@ -25,7 +22,7 @@ public class CakesController {
 
     @GetMapping("/{name}")
     public Cake getCake(@PathVariable String name) {
-        return service.getCakeOrThrow(name);
+        return service.getCake(name);
     }
 
     @PostMapping
@@ -40,4 +37,3 @@ public class CakesController {
         if (!isRemoved) throw new CakeNotFoundException();
     }
 }
-

@@ -34,7 +34,7 @@ public class CakesServiceTest {
 
     @Test
     public void getOneShouldReturnCake() {
-        Cake result = service.getCakeOrThrow("Pie");
+        Cake result = service.getCake("Pie");
         assertThat(result.getName(), equalTo("Pie"));
     }
 
@@ -47,21 +47,22 @@ public class CakesServiceTest {
 
     @Test
     public void getShouldIgnoreStringCase() {
-        Cake result = service.getCakeOrThrow("EcLaIR");
+        Cake result = service.getCake("EcLaIR");
         assertThat(result.getName(), equalTo("Eclair"));
     }
 
     @Test
     public void getNotExistingCakeShouldThrowException() {
         Assertions.assertThrows(CakeNotFoundException.class,
-                ()-> service.getCakeOrThrow("not existing"));
+                ()-> service.getCake("not existing"));
     }
 
     @Test
     public void addCakeShouldWork() {
         Cake cake = new Cake("new cake");
         service.addCake(cake);
-        assertThat(service.getCakes().contains(cake), is(true));
+        assertThat(service.getCakes().stream().anyMatch(
+                (item)->item.getName().equalsIgnoreCase(cake.getName())), is(true));
     }
 
     @Test

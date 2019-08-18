@@ -5,13 +5,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 @Slf4j
 public class CakesService {
 
-    private final CakesRepository repository;
+    private CakesRepository repository;
 
     CakesService(CakesRepository repository) {
         this.repository = repository;
@@ -23,9 +22,10 @@ public class CakesService {
         return cakes;
     }
 
-    Cake getCakeOrThrow(String name) {
+    public Cake getCake(String name) {
         var cake = Optional.ofNullable(repository.findCakeByNameIgnoreCase(name));
-        cake.ifPresent((elem) -> log.debug("Cake {} found.", name));
+        if (cake.isPresent())
+            log.debug("Cake {} found.", name);
         return cake.orElseThrow(()-> {
             log.debug("Cake {} not found.", name);
             throw new CakeNotFoundException();
@@ -33,9 +33,13 @@ public class CakesService {
     }
 
     Cake addCake(Cake cake) {
-        Cake savedCake = repository.save(cake);
-        log.debug("Added new cake: {}.", cake.getName());
+        var savedCake = repository.save(cake);
+        log.debug("Added new cake: {}.", savedCake.getName());
         return savedCake;
+    }
+
+    public Cake saveCake(Cake cake){
+        return repository.save(cake);
     }
 
     boolean deleteCake(String name) {

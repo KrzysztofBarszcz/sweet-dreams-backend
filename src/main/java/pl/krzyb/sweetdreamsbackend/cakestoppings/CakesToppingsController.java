@@ -28,7 +28,7 @@ public class CakesToppingsController {
 
     @DeleteMapping("/{toppingName}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCake(@PathVariable String cakeName, @PathVariable String toppingName) {
+    public void deleteToppingOfCake(@PathVariable String cakeName, @PathVariable String toppingName) {
         service.deleteToppingForCake(cakeName, toppingName);
     }
 }
