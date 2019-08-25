@@ -30,8 +30,8 @@ public class CakesControllerTest {
 
     @BeforeEach
     public void setUp() {
-        List<Cake> cakes = List.of(new Cake("Pie"), new Cake("Eclair"),
-                new Cake("Cheese cake"), new Cake("Birthday cake"));
+        List<Cake> cakes = List.of(new Cake("Pie", 10.12), new Cake("Eclair", 33.44),
+                new Cake("Cheese cake",6.79), new Cake("Birthday cake", 9.36));
         repository.saveAll(cakes);
     }
 
@@ -55,7 +55,7 @@ public class CakesControllerTest {
     @Test
     public void postNewCakeShouldReturnOkAndAddCake() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        Cake cake = new Cake("newcake");
+        Cake cake = new Cake("newcake", 6.83);
         String cakeString = mapper.writeValueAsString(cake);
         mvc.perform(post("/cakes")
                 .contentType(MediaType.APPLICATION_JSON).content(cakeString))

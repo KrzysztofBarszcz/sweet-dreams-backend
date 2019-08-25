@@ -19,9 +19,13 @@ public class Cake {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
     @NonNull
     private String name;
 
     @ManyToMany
     private List<Topping> toppings = new ArrayList<>();
+
+    @NonNull
+    private Double cost;
 }
