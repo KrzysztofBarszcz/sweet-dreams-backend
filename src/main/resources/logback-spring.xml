@@ -1,38 +1,35 @@
 <configuration>
     <timestamp key="bySecond" datePattern="yyyy-MM-dd'T':HH:mm:ss"/>
 
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%d %magenta([%thread]) %highlight(%-5level) --- %cyan([%thread]) %logger{36}: %msg%n</pattern>
+            <pattern>%d %magenta([%thread]) %highlight(%-5level) --- %cyan(%logger{36}): %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
-
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/log-${bySecond}.txt</file>
-        <append>true</append>
-        <!-- set immediateFlush to false for much higher logging throughput -->
-        <immediateFlush>false</immediateFlush>
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/log-%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history capped at 3GB total size -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+
+        </rollingPolicy>
+
         <encoder>
             <pattern>%d {HH:mm:ss.SSS} [%thread] %-5level --- [%thread] %logger{36}: %msg%n</pattern>
         </encoder>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
-        </filter>
     </appender>
 
-
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
-
 </configuration>
