@@ -5,7 +5,7 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%d %magenta([%thread]) %highlight(%-5level) --- %cyan(%logger{36}): %msg%n</pattern>
+            <pattern>%d %magenta([%-20thread]) %highlight(%-5level) --- %cyan(%logger{50}): %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -24,7 +24,7 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d {HH:mm:ss.SSS} [%thread] %-5level --- [%thread] %logger{36}: %msg%n</pattern>
+            <pattern>%d [%-20thread] %-5level --- %logger{50}: %msg%n</pattern>
         </encoder>
     </appender>
 
