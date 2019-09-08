@@ -1,5 +1,4 @@
 <configuration>
-    <timestamp key="bySecond" datePattern="yyyy-MM-dd'T':HH:mm:ss"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
@@ -16,11 +15,9 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <fileNamePattern>logs/log-%d{yyyy-MM-dd}.log</fileNamePattern>
-
             <!-- keep 30 days' worth of history capped at 3GB total size -->
             <maxHistory>30</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
-
         </rollingPolicy>
 
         <encoder>
