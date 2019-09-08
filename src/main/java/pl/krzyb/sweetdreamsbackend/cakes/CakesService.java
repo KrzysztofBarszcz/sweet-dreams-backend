@@ -18,7 +18,8 @@ public class CakesService {
 
     List<Cake> getCakes() {
         var cakes = repository.findAll();
-        log.debug("Found {} cakes.", cakes.size());
+        log.info("Found {} cakes.", cakes.size());
+        log.debug(log.toString());
         return cakes;
     }
 
