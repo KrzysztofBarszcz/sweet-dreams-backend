@@ -34,8 +34,8 @@ public class CakesToppingsServiceTest {
         List<Topping> toppings = List.of(new Topping("Whipped cream"), new Topping("Almonds"),
                 new Topping("Poppy"), new Topping("Chocolate"));
 
-        List<Cake> cakes = List.of(new Cake("Pie"), new Cake("Eclair"),
-                new Cake("Cheese cake"), new Cake("Birthday cake"));
+        List<Cake> cakes = List.of(new Cake("Pie", 10.12), new Cake("Eclair", 33.44),
+                new Cake("Cheese cake",6.79), new Cake("Birthday cake", 9.36));
 
         cakes.get(0).getToppings().add(toppings.get(0));
         cakes.get(1).getToppings().add(toppings.get(1));

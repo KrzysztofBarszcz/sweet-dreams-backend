@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class CakesServiceTest {
 
     @BeforeEach
     public void setUp() {
-        List<Cake> cakes = List.of(new Cake("Pie"), new Cake("Eclair"),
-                new Cake("Cheese cake"), new Cake("Birthday cake"));
+        List<Cake> cakes = List.of(new Cake("Pie", 10.12), new Cake("Eclair", 33.44),
+                new Cake("Cheese cake", 6.79), new Cake("Birthday cake", 9.36));
         repository.saveAll(cakes);
     }
 
@@ -54,21 +55,27 @@ public class CakesServiceTest {
     @Test
     public void getNotExistingCakeShouldThrowException() {
         Assertions.assertThrows(CakeNotFoundException.class,
-                ()-> service.getCake("not existing"));
+                () -> service.getCake("not existing"));
     }
 
     @Test
     public void addCakeShouldWork() {
-        Cake cake = new Cake("new cake");
+        Cake cake = new Cake("new cake", 1.0);
         service.addCake(cake);
         assertThat(service.getCakes().stream().anyMatch(
-                (item)->item.getName().equalsIgnoreCase(cake.getName())), is(true));
+                (item) -> item.getName().equalsIgnoreCase(cake.getName())), is(true));
     }
 
     @Test
     public void removeCakeShouldWork() {
-        Cake cakeToRemove = new Cake("pie");
+        Cake cakeToRemove = new Cake("pie", 10.12);
         service.deleteCake(cakeToRemove.getName());
         assertThat(service.getCakes().contains(cakeToRemove), is(false));
+    }
+
+    @Test
+    public void checkCakeNamesAreUnique() {
+        Cake cake = new Cake("Pie", 1.0);
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> repository.save(cake));
     }
 }
