@@ -1,9 +1,6 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import pl.krzyb.sweetdreamsbackend.toppings.Topping;
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Cake {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,4 +26,6 @@ public class Cake {
 
     @NonNull
     private Double cost;
+
+    private String description;
 }
