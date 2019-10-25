@@ -37,7 +37,6 @@ public class ToppingsIngredientsService {
         return topping.getIngredients();
     }
 
-
     public void deleteIngredientOfTopping(String toppingName, String ingredientName) {
         Topping topping = toppingsService.getTopping(toppingName);
         Ingredient ingredient = ingredientsService.getIngredient(ingredientName);

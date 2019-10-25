@@ -36,7 +36,6 @@ public class IngredientsService {
         var savedIngredient = repository.save(ingredient);
         log.debug("Added new ingredient: {}.", savedIngredient.getName());
         return savedIngredient;
-
     }
 
     public boolean deleteIngredient(String name) {
