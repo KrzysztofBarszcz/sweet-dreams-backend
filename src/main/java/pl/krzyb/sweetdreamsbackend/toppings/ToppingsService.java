@@ -37,6 +37,10 @@ public class ToppingsService {
         return savedTopping;
     }
 
+    public Topping saveTopping(Topping topping) {
+        return repository.save(topping);
+    }
+
     boolean deleteTopping(String name) {
         Topping toppingToRemove = repository.findToppingByNameIgnoreCase(name);
         if (toppingToRemove != null) {

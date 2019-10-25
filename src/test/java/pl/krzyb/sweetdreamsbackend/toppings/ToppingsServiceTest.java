@@ -60,7 +60,8 @@ public class ToppingsServiceTest {
     public void addToppingShouldWork() {
         Topping topping = new Topping("new topping");
         service.addTopping(topping);
-        assertThat(service.getToppings().contains(topping), is(true));
+        assertThat(service.getToppings().stream().anyMatch(
+                (item)->item.getName().equalsIgnoreCase(topping.getName())), is(true));
     }
 
     @Test
