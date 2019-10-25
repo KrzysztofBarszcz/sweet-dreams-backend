@@ -1,20 +1,20 @@
-package pl.krzyb.sweetdreamsbackend.toppings;
+package pl.krzyb.sweetdreamsbackend.ingredients;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import pl.krzyb.sweetdreamsbackend.ingredients.Ingredient;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Topping {
+public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,6 +22,6 @@ public class Topping {
     @NonNull
     private String name;
 
-    @ManyToMany
-    private List<Ingredient> ingredients = new ArrayList<>();
+    @NonNull
+    private Taste taste;
 }
