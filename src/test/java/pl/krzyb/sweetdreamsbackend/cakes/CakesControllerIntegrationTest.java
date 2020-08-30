@@ -1,43 +1,47 @@
 package pl.krzyb.sweetdreamsbackend.cakes;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CakesControllerTest {
+public class CakesControllerIntegrationTest {
 
     @Autowired
     MockMvc mvc;
-    @MockBean
-    private CakesService service;
+    @Autowired
+    private CakesRepository repository;
 
-    Cake pie = new Cake("Pie", 10.12);
+    @BeforeEach
+    public void setUp() {
+        List<Cake> cakes = List.of(new Cake("Pie", 10.12), new Cake("Eclair", 33.44),
+                new Cake("Cheese cake",6.79), new Cake("Birthday cake", 9.36));
+        repository.saveAll(cakes);
+    }
 
-    List<Cake> cakes = List.of(pie, new Cake("Eclair", 33.44),
-            new Cake("Cheese cake", 6.79), new Cake("Birthday cake", 9.36));
+    @AfterEach
+    public void tearDown() {
+        repository.deleteAll();
+    }
 
     @Test
     public void getCakesShouldReturnOkAnd4Cakes() throws Exception {
-        //given
-        when(service.getCakes()).thenReturn(cakes);
         //when&then
         mvc.perform(get("/cakes")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)));
@@ -45,8 +49,6 @@ public class CakesControllerTest {
 
     @Test
     public void getPieShouldReturnOk() throws Exception {
-        //given
-        when(service.getCake("pie")).thenReturn(pie);
         //when&then
         mvc.perform(get("/cakes/pie")).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Pie")));
@@ -58,8 +60,6 @@ public class CakesControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         Cake cake = new Cake("newcake", 6.83);
         String cakeString = mapper.writeValueAsString(cake);
-
-        when(service.addCake(cake)).thenReturn(cake);
         //when&then
         mvc.perform(post("/cakes")
                 .contentType(MediaType.APPLICATION_JSON).content(cakeString))
@@ -70,10 +70,10 @@ public class CakesControllerTest {
     @Test
     public void deleteCakeShouldRemoveIt() throws Exception {
         //given
-        when(service.deleteCake("pie")).thenReturn(true);
+        int cakesNumber = repository.findAll().size();
         //when&then
         mvc.perform(delete("/cakes/pie"))
                 .andExpect(status().isNoContent());
-        verify(service).deleteCake("pie");
+        assertThat(repository.findAll().size(), equalTo(cakesNumber - 1));
     }
 }
